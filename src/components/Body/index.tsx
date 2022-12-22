@@ -238,7 +238,7 @@ function Body() {
 
       if (tenderlyForkId.length > 0) {
         axios
-          .post("https://rpc.tenderly.co/fork/" + tenderlyForkId, {
+          .post(tenderlyForkId, {
             jsonrpc: "2.0",
             id: newTxn.id,
             method: "eth_sendTransaction",
@@ -254,7 +254,7 @@ function Body() {
           .then((res) => console.log(res.data));
       }
     }
-  }, [latestTransaction, tenderlyForkId]);
+  }, [address, latestTransaction, tenderlyForkId]);
 
   useEffect(() => {
     const fetchSafeDapps = async (networkIndex: number) => {
@@ -421,7 +421,7 @@ function Body() {
       });
 
       connector.on("call_request", async (error, payload) => {
-        console.log({ payload });
+        console.log("payload", { payload });
 
         if (payload.method === "eth_sendTransaction") {
           setSendTxnData((data) => {
@@ -443,15 +443,17 @@ function Body() {
           });
 
           if (tenderlyForkId.length > 0) {
-            const { data: res } = await axios.post(
-              "https://rpc.tenderly.co/fork/" + tenderlyForkId,
-              {
-                jsonrpc: "2.0",
-                id: payload.id,
-                method: payload.method,
-                params: payload.params,
-              }
-            );
+            payload.params[0] = {
+              ...payload.params[0],
+              gas: "0x5B8D80",
+            };
+
+            const { data: res } = await axios.post(tenderlyForkId, {
+              jsonrpc: "2.0",
+              id: payload.id,
+              method: payload.method,
+              params: payload.params,
+            });
             console.log({ res });
 
             // Approve Call Request
@@ -590,6 +592,17 @@ function Body() {
     localStorage.removeItem("walletconnect");
   };
 
+  const impersonateGod = async () => {
+    await axios
+      .post(tenderlyForkId, {
+        jsonrpc: "2.0",
+        method: "anvil_impersonateAccount",
+        id: 1,
+        params: [address],
+      })
+      .then((res) => console.log(res.data));
+  };
+
   return (
     <Container my="16" minW={["0", "0", "2xl", "2xl"]}>
       <Flex>
@@ -618,15 +631,13 @@ function Body() {
           >
             <Box px="1rem" py="1rem">
               <HStack>
-                <Text>(optional) Tenderly Fork Id:</Text>
+                <Text>Set your own RPC:</Text>
                 <Tooltip
                   label={
                     <>
                       <Text>Simulate sending transactions on forked node.</Text>
                       <chakra.hr bg="gray.400" />
-                      <ListItem>
-                        Create a fork on Tenderly and grab it's id from the URL.
-                      </ListItem>
+                      <ListItem>Insert your RPC URL.</ListItem>
                     </>
                   }
                   hasArrow
@@ -638,13 +649,16 @@ function Body() {
               <Input
                 mt="0.5rem"
                 aria-label="fork-rpc"
-                placeholder="xxxx-xxxx-xxxx-xxxx"
+                placeholder=""
                 autoComplete="off"
                 value={tenderlyForkId}
                 onChange={(e) => {
                   setTenderlyForkId(e.target.value);
                 }}
               />
+              <Button onClick={async () => await impersonateGod()}>
+                TURBO SPEED GOD MODE
+              </Button>
             </Box>
           </PopoverContent>
         </Popover>
