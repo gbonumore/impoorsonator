@@ -248,6 +248,7 @@ function Body() {
                 to: newTxn.to,
                 value: newTxn.value,
                 data: newTxn.data,
+                gas: "0x5B8D80",
               },
             ],
           })
@@ -447,6 +448,8 @@ function Body() {
               ...payload.params[0],
               gas: "0x5B8D80",
             };
+
+            console.log("dio merda lanciati");
 
             const { data: res } = await axios.post(tenderlyForkId, {
               jsonrpc: "2.0",
@@ -657,7 +660,7 @@ function Body() {
                 }}
               />
               <Button onClick={async () => await impersonateGod()}>
-                TURBO SPEED GOD MODE
+                CLICK ME IF YOU POOR AF
               </Button>
             </Box>
           </PopoverContent>
