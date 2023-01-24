@@ -45,6 +45,7 @@ import {
   GridItem,
   Image,
   Spinner,
+  Code,
 } from "@chakra-ui/react";
 import {
   SettingsIcon,
@@ -666,8 +667,8 @@ function Body() {
         />
         <HStack mt="1rem">
           <Text>
-            Current migration testing RPC :{" "}
-            {process.env.REACT_APP_MIGRATION_TESTNET_RPC}
+            Current migration testing RPC :<br />
+            <Code>{process.env.REACT_APP_MIGRATION_TESTNET_RPC}</Code>
           </Text>
         </HStack>
         <Box mt="1.5rem">
