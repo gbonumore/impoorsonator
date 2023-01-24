@@ -28,7 +28,7 @@ function Navbar() {
         fontSize={{ base: "2xl", sm: "3xl", md: "4xl" }}
         pr="2rem"
       >
-        🎭 Impoorsonator 🕵️
+        🎭 Migration Impersonator 🕵️
       </Heading>
       <Flex flex="1" justifyContent="flex-end" alignItems={"center"}>
         <Button onClick={toggleColorMode} rounded="full" h="40px" w="40px">

@@ -133,7 +133,7 @@ function Body() {
   const [isConnected, setIsConnected] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const tabs = ["WalletConnect", "iFrame", "Extension"];
+  const tabs = ["WalletConnect"];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [isIFrameLoading, setIsIFrameLoading] = useState(false);
   const [safeDapps, setSafeDapps] = useState<{
@@ -144,7 +144,9 @@ function Body() {
   const [inputAppUrl, setInputAppUrl] = useState<string>();
   const [iframeKey, setIframeKey] = useState(0); // hacky way to reload iframe when key changes
 
-  const [tenderlyForkId, setTenderlyForkId] = useState("");
+  const [tenderlyForkId, setTenderlyForkId] = useState(
+    "https://bestnet.alexintosh.com/rpc/migration-test-round-three"
+  );
   const [sendTxnData, setSendTxnData] = useState<
     {
       id: number;
@@ -187,7 +189,7 @@ function Body() {
 
     setProvider(
       new ethers.providers.JsonRpcProvider(
-        `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`
+        process.env.REACT_APP_MIGRATION_TESTNET_RPC
       )
     );
 
@@ -595,7 +597,7 @@ function Body() {
     localStorage.removeItem("walletconnect");
   };
 
-  const impersonateGod = async () => {
+  const impersonateAnvil = async () => {
     await axios
       .post(tenderlyForkId, {
         jsonrpc: "2.0",
@@ -608,64 +610,6 @@ function Body() {
 
   return (
     <Container my="16" minW={["0", "0", "2xl", "2xl"]}>
-      <Flex>
-        <Spacer flex="1" />
-        <Popover
-          placement="bottom-start"
-          isOpen={isOpen}
-          onOpen={onOpen}
-          onClose={onClose}
-        >
-          <PopoverTrigger>
-            <Box>
-              <Button>
-                <SettingsIcon
-                  transition="900ms rotate ease-in-out"
-                  transform={isOpen ? "rotate(33deg)" : "rotate(0deg)"}
-                />
-              </Button>
-            </Box>
-          </PopoverTrigger>
-          <PopoverContent
-            border={0}
-            boxShadow="xl"
-            rounded="xl"
-            overflowY="auto"
-          >
-            <Box px="1rem" py="1rem">
-              <HStack>
-                <Text>Set your own RPC:</Text>
-                <Tooltip
-                  label={
-                    <>
-                      <Text>Simulate sending transactions on forked node.</Text>
-                      <chakra.hr bg="gray.400" />
-                      <ListItem>Insert your RPC URL.</ListItem>
-                    </>
-                  }
-                  hasArrow
-                  placement="top"
-                >
-                  <InfoIcon />
-                </Tooltip>
-              </HStack>
-              <Input
-                mt="0.5rem"
-                aria-label="fork-rpc"
-                placeholder=""
-                autoComplete="off"
-                value={tenderlyForkId}
-                onChange={(e) => {
-                  setTenderlyForkId(e.target.value);
-                }}
-              />
-              <Button onClick={async () => await impersonateGod()}>
-                CLICK ME IF YOU POOR AF
-              </Button>
-            </Box>
-          </PopoverContent>
-        </Popover>
-      </Flex>
       <FormControl>
         <FormLabel>Enter Address or ENS to Impersonate</FormLabel>
         <InputGroup>
@@ -708,6 +652,29 @@ function Body() {
           </option>
         ))}
       </Select>
+      <Box py="1rem">
+        <HStack>
+          <Text>Migration RPC :</Text>
+        </HStack>
+        <Input
+          mt="0.5rem"
+          aria-label="fork-rpc"
+          placeholder=""
+          autoComplete="off"
+          value={tenderlyForkId}
+          onChange={(e) => {
+            setTenderlyForkId(e.target.value);
+          }}
+        />
+        {/* <Box mt="1.5rem">
+          <Center>
+            <Button onClick={async () => await impersonateAnvil()}>
+              Skip transaction signing <br />
+              (🤓 I know what I'm doing)
+            </Button>
+          </Center>
+        </Box> */}
+      </Box>
       <Center flexDir="column">
         <HStack
           mt="1rem"
