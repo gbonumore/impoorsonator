@@ -144,9 +144,7 @@ function Body() {
   const [inputAppUrl, setInputAppUrl] = useState<string>();
   const [iframeKey, setIframeKey] = useState(0); // hacky way to reload iframe when key changes
 
-  const [tenderlyForkId, setTenderlyForkId] = useState(
-    process.env.REACT_APP_MIGRATION_TESTNET_RPC
-  );
+  const [tenderlyForkId, setTenderlyForkId] = useState("");
   const [sendTxnData, setSendTxnData] = useState<
     {
       id: number;
