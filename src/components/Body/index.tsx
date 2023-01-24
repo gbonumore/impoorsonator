@@ -659,7 +659,7 @@ function Body() {
         <Input
           mt="0.5rem"
           aria-label="fork-rpc"
-          placeholder=""
+          placeholder="https://bestnet.alexintosh.com/rpc/migration-test-round-three"
           autoComplete="off"
           value={tenderlyForkId}
           onChange={(e) => {
