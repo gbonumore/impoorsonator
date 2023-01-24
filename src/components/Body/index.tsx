@@ -145,7 +145,7 @@ function Body() {
   const [iframeKey, setIframeKey] = useState(0); // hacky way to reload iframe when key changes
 
   const [tenderlyForkId, setTenderlyForkId] = useState(
-    "https://bestnet.alexintosh.com/rpc/migration-test-round-three"
+    process.env.REACT_APP_MIGRATION_TESTNET_RPC
   );
   const [sendTxnData, setSendTxnData] = useState<
     {
@@ -659,21 +659,26 @@ function Body() {
         <Input
           mt="0.5rem"
           aria-label="fork-rpc"
-          placeholder="https://bestnet.alexintosh.com/rpc/migration-test-round-three"
+          placeholder=""
           autoComplete="off"
           value={tenderlyForkId}
           onChange={(e) => {
             setTenderlyForkId(e.target.value);
           }}
         />
-        {/* <Box mt="1.5rem">
+        <HStack mt="1rem">
+          <Text>
+            Current migration testing RPC :{" "}
+            {process.env.REACT_APP_MIGRATION_TESTNET_RPC}
+          </Text>
+        </HStack>
+        <Box mt="1.5rem">
           <Center>
             <Button onClick={async () => await impersonateAnvil()}>
-              Skip transaction signing <br />
-              (🤓 I know what I'm doing)
+              Skip transaction signing
             </Button>
           </Center>
-        </Box> */}
+        </Box>
       </Box>
       <Center flexDir="column">
         <HStack
